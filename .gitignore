@@ -1,0 +1,37 @@
+# Secrets / local config
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Node / frontend
+node_modules/
+frontend/dist/
+npm-debug.log*
+
+# Python / ai-service
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Java / backend
+target/
+*.class
+*.jar
+*.log
+
+# Uploaded files and local data
+uploads/
+backend/uploads/
+*.pdf
+!**/docs/**/*.pdf

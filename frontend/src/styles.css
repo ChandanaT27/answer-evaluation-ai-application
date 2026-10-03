@@ -1,0 +1,13 @@
+body { background: #f4f6fb; }
+.brand { font-weight: 700; letter-spacing: .3px; }
+.sidebar { min-height: calc(100vh - 56px); background: #1f2547; }
+.sidebar .nav-link { color: #c9cff0; border-radius: .4rem; margin-bottom: 2px; }
+.sidebar .nav-link.active, .sidebar .nav-link:hover { background: #3a4180; color: #fff; }
+.card { border: 0; box-shadow: 0 1px 3px rgba(20, 30, 80, .08); }
+.stat-card .display-6 { font-weight: 700; }
+.answer-box { white-space: pre-wrap; background: #fff; border: 1px solid #dee2e6; border-radius: .4rem; padding: .75rem; font-family: Georgia, serif; line-height: 1.7; }
+mark.m-SPELLING { background: #ffe08a; }
+mark.m-GRAMMAR { background: #b9e0ff; }
+mark.m-INCORRECT_CONTENT { background: #ffb3b3; }
+.table-responsive { overflow-x: auto; }
+@media (max-width: 767px) { .sidebar { min-height: auto; } }

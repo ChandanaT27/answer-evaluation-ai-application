@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:inkgrade;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+app:
+  storage:
+    root: ${java.io.tmpdir}/inkgrade-test-uploads
+  seed-demo: false

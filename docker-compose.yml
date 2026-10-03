@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: inkgrade
+      POSTGRES_USER: inkgrade
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-inkgrade}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U inkgrade -d inkgrade"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  ai-service:
+    build:
+      context: ./ai-service
+      args:
+        INSTALL_ML: ${INSTALL_ML:-false}
+    environment:
+      AI_API_KEY: ${AI_API_KEY:-dev-ai-key}
+      EMBEDDING_BACKEND: ${EMBEDDING_BACKEND:-auto}
+      OCR_ENGINE: ${OCR_ENGINE:-tesseract}
+    volumes:
+      - hfcache:/root/.cache/huggingface
+
+  backend:
+    build: ./backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/inkgrade
+      DB_USER: inkgrade
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-inkgrade}
+      JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me-dev-only-secret-change-me}
+      AI_SERVICE_URL: http://ai-service:8001
+      AI_API_KEY: ${AI_API_KEY:-dev-ai-key}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@123}
+      SEED_DEMO: ${SEED_DEMO:-true}
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
+    volumes:
+      - uploads:/data/uploads
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  pgdata:
+  uploads:
+  hfcache:

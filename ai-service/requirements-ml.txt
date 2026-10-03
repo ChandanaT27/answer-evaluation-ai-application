@@ -1,0 +1,4 @@
+# Optional heavy models (installed in Docker when INSTALL_ML=true)
+sentence-transformers>=3.0
+transformers>=4.44
+torch>=2.2
