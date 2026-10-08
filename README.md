@@ -7,7 +7,7 @@ Teachers upload scanned or handwritten answer sheets. The system reads them with
 | Part | Tech | Port |
 |---|---|---|
 | `frontend/` | React + Vite | 5173 (dev) / 3000 (Docker) |
-| `backend/` | Spring Boot 3, Java 21, JWT security | 8080 |
+| `backend/` | FastAPI, SQLAlchemy, JWT security | 8080 |
 | `ai-service/` | FastAPI, Tesseract OCR, embeddings | 8001 |
 | Database | PostgreSQL 16 | 5432 |
 
@@ -16,7 +16,6 @@ Teachers upload scanned or handwritten answer sheets. The system reads them with
 **Option A (Docker):** Docker with Compose.
 
 **Option B (run locally):**
-- Java 21 and Maven 3.9+
 - Node.js 20+ and npm
 - Python 3.9 to 3.11
 - Tesseract OCR (`brew install tesseract` on macOS, `sudo apt install tesseract-ocr` on Ubuntu)
@@ -66,14 +65,17 @@ Optional, for better matching and OCR (about 2 GB): `pip install -r requirements
 ### 3. Backend
 ```bash
 cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 DB_PASSWORD=inkgrade \
 AI_API_KEY=dev-ai-key \
 SEED_DEMO=true \
-mvn spring-boot:run
+uvicorn app.main:app --port 8080
 ```
 - Set `DB_PASSWORD` to match your database password. If you used `.env` with Docker for the database, use the `POSTGRES_PASSWORD` value from it.
 - Set `AI_API_KEY` to the same value you used for the AI service.
-- Wait for `Started InkGradeApplication`. Check it with `curl localhost:8080/actuator/health`.
+- Wait for `Application startup complete`. Check it with `curl localhost:8080/actuator/health`.
 
 ### 4. Frontend
 ```bash
@@ -108,7 +110,7 @@ Backend environment variables (all have development defaults):
 
 | Variable | Default |
 |---|---|
-| `DB_URL` / `DB_USER` / `DB_PASSWORD` | `jdbc:postgresql://localhost:5432/inkgrade` / `inkgrade` / `inkgrade` |
+| `DB_URL` / `DB_USER` / `DB_PASSWORD` | `postgresql://localhost:5432/inkgrade` / `inkgrade` / `inkgrade` |
 | `JWT_SECRET` | dev value, at least 32 characters |
 | `AI_SERVICE_URL` / `AI_API_KEY` | `http://localhost:8001` / empty (check disabled) |
 | `ADMIN_USERNAME` / `ADMIN_PASSWORD` | `admin` / `Admin@123` |
@@ -123,7 +125,7 @@ AI service: `EMBEDDING_BACKEND` (`auto`, `sbert` or `hash`), `OCR_ENGINE` (`tess
 ```bash
 cd ai-service && source .venv/bin/activate && pytest
 cd frontend && npm test
-cd backend && mvn test
+cd backend && source .venv/bin/activate && pytest
 ```
 
 ## Troubleshooting

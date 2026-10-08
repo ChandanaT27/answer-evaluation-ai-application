@@ -17,17 +17,14 @@ node_modules/
 frontend/dist/
 npm-debug.log*
 
-# Python / ai-service
+# Python (backend and ai-service)
 .venv/
 venv/
 __pycache__/
 *.pyc
 .pytest_cache/
 
-# Java / backend
-target/
-*.class
-*.jar
+# Logs
 *.log
 
 # Uploaded files and local data

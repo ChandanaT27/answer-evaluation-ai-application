@@ -35,7 +35,7 @@ services:
       ai-service:
         condition: service_started
     environment:
-      DB_URL: jdbc:postgresql://postgres:5432/inkgrade
+      DB_URL: postgresql://postgres:5432/inkgrade
       DB_USER: inkgrade
       DB_PASSWORD: ${POSTGRES_PASSWORD:-inkgrade}
       JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me-dev-only-secret-change-me}
